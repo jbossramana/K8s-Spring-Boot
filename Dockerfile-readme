@@ -1,0 +1,46 @@
+FROM openjdk:17-alpine
+VOLUME /tmp
+EXPOSE 8080
+ADD target/DockerSample-0.0.1-SNAPSHOT.jar  sample.jar
+ENTRYPOINT [ "sh", "-c", "java -jar /sample.jar" ]
+
+
+Here's what's happening with each line in your Dockerfile snippet:
+
+FROM openjdk:17-jdk-alpine: This line specifies the base image for your Docker container. It's using the Alpine Linux distribution with OpenJDK 17.
+
+VOLUME /tmp: This line creates a mount point within the container at /tmp. This allows you to map a directory from your host machine to the /tmp directory in the container. 
+This is often used for storing temporary files or for sharing data between the host and the container.
+
+EXPOSE 8080: This line is a metadata instruction that indicates the container will be listening on port 8080. It doesn't actually expose or publish the port to the host machine, 
+but it's a way to convey to users or other developers the intention that the application running in the container will be available on port 8080.
+
+ADD target/DockerSample-0.0.1-SNAPSHOT.jar  sample.jar: This line copies the JAR file from your local filesystem into the container and renames it to sample.jar.
+
+ENTRYPOINT [ "sh", "-c", "java -jar /sample.jar" ]: This line sets the command that will be run when the container starts. It runs a shell command to execute the Java application with 
+the JAR file you copied into the container.
+
+
+->  The EXPOSE instruction is not actually exposing the port to the host or making it accessible externally. To expose the port to the host, you would need to use the -p or -P option when r
+unning the container with docker run to publish the port to the host machine. 
+For example: docker run -p 8080:8080 your-image-name
+
+
+Some of the commonly used metadata instructions include:
+
+LABEL: The LABEL instruction is used to add metadata to an image. It allows you to set key-value pairs that describe various attributes of the image, such as version, maintainer, 
+description, and more. For example:
+
+LABEL maintainer="yourname@example.com"
+LABEL version="1.0"
+LABEL description="This is a sample Docker image."
+
+
+MAINTAINER: While LABEL is more flexible and recommended for specifying the maintainer, you can also use the MAINTAINER instruction to specify the maintainer's name and email address. 
+It's considered a legacy instruction and might be deprecated in the future.
+MAINTAINER yourname@example.com
+
+ENV: The ENV instruction is used to set environment variables in the image. These variables can be used for configuration or to provide additional metadata about the image.
+ENV APP_NAME="My App" \
+    APP_VERSION="1.0"
+
