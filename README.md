@@ -23,6 +23,14 @@ kubectl expose deployment  other-rest-api --type=LoadBalancer --port=8081
 http://localhost:8080/simple  
 http://localhost:8081/other     [this service calls simple service using Ribbon Client and K8s service registry]  
 
+Note:
+problem:  kubectl shows an external IP as "pending," it typically means that the Kubernetes service type is trying to provision an external IP but hasn't succeeded yet
+solution :
+kubectl port-forward:
+kubectl port-forward svc/simple-rest-api 8080:8080
+kubectl port-forward svc/other-rest-api 8081:8081
+
+
 4. Explain K8s commands 
 
 kubectl  explain deployment(s)   
