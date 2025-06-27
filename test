@@ -1,0 +1,4 @@
+<dependency>
+  <groupId>org.springframework.cloud</groupId>
+  <artifactId>spring-cloud-starter-kubernetes-fabric8-config</artifactId>
+</dependency>
