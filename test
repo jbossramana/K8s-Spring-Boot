@@ -1,36 +1,6 @@
-<dependency>
-  <groupId>org.springframework.cloud</groupId>
-  <artifactId>spring-cloud-starter-kubernetes-fabric8-config</artifactId>
-</dependency>
-
-
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: payment-service
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: payment-service
-  template:
-    metadata:
-      labels:
-        app: payment-service
-    spec:
-      containers:
-        - name: payment-service
-          image: jbossramana/microservices:payment-service:latest
-          ports:
-            - containerPort: 8080
-          volumeMounts:
-            - name: config-volume
-              mountPath: /config
-          env:
-            - name: SPRING_CONFIG_LOCATION
-              value: "file:/config/application.properties"
-      volumes:
-        - name: config-volume
-          configMap:
-            name: paymentservice-config
-
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/jbossramana/K8s-Advanced.git
+git push -u origin main
