@@ -149,6 +149,32 @@ A Pod is meant to run one “main” app container, plus optionally some small h
 Running multiple copies of the same Spring Boot app inside one Pod defeats the purpose of Kubernetes scaling and isolation.
 
 
++---------------------------------------+
+|                Pod                    |
+|  (Smallest deployable Kubernetes unit)|
+|                                       |
+|  +-----------------------------+      |
+|  | Spring Boot Application      |      |
+|  | (Main container running app) |      |
+|  +-----------------------------+      |
+|                                       |
+|  +-----------------------------+      |
+|  | Logging Sidecar Container    |      |
+|  | (Handles log shipping/agent) |      |
+|  +-----------------------------+      |
+|                                       |
+|  +-----------------------------+      |
+|  | Other Sidecar Container      |      |
+|  | (e.g., metrics, proxy)       |      |
+|  +-----------------------------+      |
++---------------------------------------+
+
+Pod groups multiple containers that work closely.
+
+Containers inside the Pod share the same IP address, port space, and storage.
+
+Sidecars assist the main app container with logging, metrics, proxies, etc.
+
 
 Kubernetes Concepts — Simplified
 ================================
