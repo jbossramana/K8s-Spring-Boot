@@ -176,6 +176,27 @@ Containers inside the Pod share the same IP address, port space, and storage.
 Sidecars assist the main app container with logging, metrics, proxies, etc.
 
 
+What is a Sidecar Container?
+============================
+
+Sidecar is a design pattern in Kubernetes and container orchestration.
+
+A sidecar is a helper container that runs alongside the main application container inside the same Pod in Kubernetes.
+
+It supports or enhances the main container by handling additional tasks.
+
+Examples of Sidecar Uses:
+=========================
+
+Logging: Collects and ships logs from the main app.
+
+Proxy: Manages network traffic for the main app (e.g., service mesh sidecar like Envoy).
+
+Monitoring: Gathers metrics or health info.
+
+Configuration: Syncs config files or certificates.
+
+
 Kubernetes Concepts — Simplified
 ================================
 
