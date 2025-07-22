@@ -1,0 +1,224 @@
+Docker Image
+============
+
+A Docker image is a read-only template used to create Docker containers.
+
+It contains:
+
+Application code (e.g., Spring Boot JAR)
+
+Base OS (e.g., Alpine, Ubuntu)
+
+Runtime (e.g., JDK)
+
+Configuration (env variables, ports)
+
+You can version, share, and reuse images.
+
+## Think of it as a blueprint 
+
+
+Docker Container 
+================
+
+A Docker container is a running instance of a Docker image.
+
+It's isolated, lightweight, and shares the host OS kernel.
+
+You can start, stop, and destroy containers quickly.
+
+It’s like a small runtime OS box running your app.
+
+Think of it as a meal made from the image.
+
+
+Spring Boot Application Instance
+================================
+
+A Spring Boot app instance is a JVM process running your Spring Boot application.
+
+It’s created by running:
+
+java -jar app.jar
+
+It includes your app code, configurations, dependencies, and embedded server.
+
+It’s the actual application running, serving business logic or APIs.
+
+
+Virtual Machine (VM)
+====================
+
+A VM is a full-blown virtual computer.
+
+It includes:
+
+Virtualized CPU, memory, storage
+
+A full OS (e.g., Ubuntu, Windows)
+
+Runs on a hypervisor like VMware, VirtualBox, or KVM.
+
+Heavyweight compared to containers.
+
+Think of it as a fully equipped house vs a container (tiny home).
+
+
++---------------------------------------------------------+
+|                    Virtual Machine                      |
+|      (Full OS with kernel, virtual CPU, RAM, storage)   |
+|                                                         |
+|   +-------------------------------------------------+   |
+|   |                Docker Engine                     |   |
+|   |                                                 |   |
+|   |   Docker Image (blueprint for container)        |   |
+|   |      +-------------------------------------+    |   |
+|   |      |         Docker Container             |    |   |
+|   |      |  (Running instance of Docker Image) |    |   |
+|   |      |                                     |    |   |
+|   |      |   +----------------------------+    |    |   |
+|   |      |   | Spring Boot Application     |    |    |   |
+|   |      |   | Instance (JVM process)      |    |    |   |
+|   |      |   +----------------------------+    |    |   |
+|   |      +-------------------------------------+    |   |
+|   +-------------------------------------------------+   |
++---------------------------------------------------------+
+
+
+
+Docker container:
+=================
+
+A lightweight, standalone container running your app — isolated with its own filesystem, processes, network, etc.
+
+Kubernetes Pod:
+===============
+
+The smallest deployable unit in Kubernetes.
+
+It can hold one or more containers (usually Docker containers).
+
+Containers inside the same Pod share the same network namespace and can communicate via localhost.
+
+They also share storage volumes and some resources
+
+
+Why Pod?
+========
+
+1. Group Containers That Work Together
+
+Sometimes an application needs multiple containers tightly coupled and sharing resources — for example:
+
+A main app container (e.g., your Spring Boot app)
+
+A helper container (e.g., logging or sidecar proxy)
+Kubernetes bundles these into a single Pod so they share the same network IP, storage volumes, and lifecycle.
+
+2. Shared Network and Storage
+
+All containers in a Pod:
+
+Share the same IP address and port space
+
+Can communicate via localhost
+
+3. Share storage volumes (e.g., persistent disks)
+
+This makes inter-container communication fast and simple.
+
+Atomic Scheduling and Lifecycle
+Pods are the smallest unit Kubernetes schedules on nodes.
+If a Pod dies, Kubernetes recreates the entire Pod (all containers inside), ensuring consistency.
+
+4. Simplifies Management
+
+By grouping related containers, Kubernetes can manage them as one unit — simplifying deployment, scaling, and updates.
+
+
+
+Pod can have multiple containers running Spring Boot apps?
+==========================================================
+
+Yes, but it’s not common or recommended to run multiple instances of the same app inside one Pod.
+
+Why?
+
+A Pod is meant to run one “main” app container, plus optionally some small helper containers (called sidecars) that assist the main container.
+
+Running multiple copies of the same Spring Boot app inside one Pod defeats the purpose of Kubernetes scaling and isolation.
+
+
+
+Kubernetes Concepts — Simplified
+================================
+
+1. Pod
+
+The smallest unit in Kubernetes.
+
+A Pod is one or more containers (usually one) running together on the same machine, sharing storage, network, and specs.
+
+Example: A Pod might run your Spring Boot app container.
+
+2. ReplicaSet
+
+Ensures that a specified number of identical Pods are always running.
+
+If a Pod dies, the ReplicaSet creates a new one to maintain the desired count.
+
+Think of it as the "Pod babysitter".
+
+3. Deployment
+
+Manages ReplicaSets and provides declarative updates to Pods.
+
+You describe the desired state (e.g., 3 replicas of a Pod running your app), and the Deployment handles creating/updating/deleting ReplicaSets and Pods.
+
+Makes rolling updates and rollbacks easy.
+
+4. Service
+
+Exposes your Pods to other Pods or external users.
+
+Provides a stable IP and DNS name to access your app, even if Pods change or move.
+
+Can load balance traffic across multiple Pods.
+
+
++----------------------------+
+|        Deployment          |
+|  (Manages ReplicaSets)     |
+|                            |
+|   +--------------------+   |
+|   |    ReplicaSet       |   |
+|   | (Maintains Pods)    |   |
+|   |                    |   |
+|   |  +--------------+  |   |
+|   |  |     Pod      |  |   |
+|   |  | (Runs app)   |  |   |
+|   |  +--------------+  |   |
+|   |  +--------------+  |   |
+|   |  |     Pod      |  |   |
+|   |  | (Runs app)   |  |   |
+|   |  +--------------+  |   |
+|   +--------------------+   |
++----------------------------+
+
+          |
+          | (exposes)
+          v
+
++----------------+
+|    Service     |
+| (Stable access)|
++----------------+
+
+
+
+
+
+
+
+
+
