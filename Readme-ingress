@@ -1,0 +1,39 @@
+1. install the NGINX ingress controller
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.1.0/deploy/static/provider/cloud/deploy.yaml
+
+2. Pre-flight check
+A few pods should start in the ingress-nginx namespace:
+kubectl get pods --namespace=ingress-nginx
+
+3. kubectl create deployment simple-rest-api --image=jbossramana/microservices:simple --port=8080
+   kubectl expose deployment simple-rest-api 
+   
+4. kubectl create deployment other-rest-api --image=jbossramana/microservices:other --port=8081
+   kubectl expose deployment other-rest-api 
+   
+5. kubectl create clusterrolebinding admin --clusterrole=cluster-admin --serviceaccount=default:default
+
+6. create an ingress resource. The following example uses an host that maps to localhost
+   kubectl create ingress demo-localhost --class=nginx  --rule=demo.localdev.me/simple=simple-rest-api:8080
+
+7. create an ingress resource. The following example uses an host that maps to localhost
+   kubectl create ingress demo-localhost2 --class=nginx  --rule=demo.localdev.me/other=other-rest-api:8081
+
+8.kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 8080:80
+
+8. Test the application
+   http://demo.localdev.me:8080/simple
+   http://demo.localdev.me:8080/other
+   
+   
+9. To describe the ingress service
+kubectl describe ingress
+
+10. To create a resource using yaml
+kubectl apply -f ingress.yaml
+
+11. To delete a resource using yaml
+kubectl delete -f ingress.yaml
+
+12. To generate yaml file from existing service
+kubectl get service --all-namespaces -o yaml  > all-service.yaml

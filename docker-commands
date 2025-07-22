@@ -1,0 +1,74 @@
+Docker build
+------------
+
+We can build a tagged docker image using the below command :
+$ docker build . -–tag=sample
+
+
+
+Docker run
+-----------
+
+We do NOT have to register with docker or publish anything to run a docker image. We can still have a locally tagged image, and run it like this:
+
+$ docker run -p  8888:8080 -t   <Image-ID>
+
+note : use -d to run it as a backgroup process
+
+$ docker run -d  -p  8888:8080  -t   <Image-ID>
+
+docker images
+-------------
+To list all docker images
+
+
+docker ps
+---------
+
+This command is used to list the running containers
+
+$ docker ps
+
+
+docker logs
+===========
+
+docker logs CONTAINER_ID
+
+docker exec
+===========
+
+To execute a command in the running container:
+docker exec -it CONTAINER_ID COMMAND
+
+Run a Command: Execute a specific command within the container. For example, running a Python script:
+docker exec -it CONTAINER_ID python my_script.py
+
+Check Network Configuration: Inspect the container's network configuration:
+docker exec -it CONTAINER_ID ifconfig
+
+
+
+docker stop
+-----------
+
+Usage: docker stop <container id>
+
+
+docker rmi
+----------
+
+To remove a docker image
+docker rmi <your-image-id>
+
+
+docker kill
+-----------
+
+Usage: docker kill <container id>
+
+
+
+
+
+

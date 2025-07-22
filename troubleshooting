@@ -1,0 +1,58 @@
+First — check your component status
+------------------------------------
+
+kubectl get componentstatuses
+
+NAME                 STATUS    MESSAGE              ERROR
+controller-manager   Healthy   ok                   
+scheduler            Healthy   ok                   
+etcd-0               Healthy   {"health": "true"}
+
+
+check the ports
+---------------
+
+netstat -a | findstr 6443/8080
+
+docker logs
+------------
+C:\Users\K V Ramana Rao\AppData\Local\Docker\log.txt
+C:\ProgramData\DockerDesktop\service.txt
+
+
+Error:
+------
+
+The connection to the server localhost:8080 was refused - did you specify the right host or port?
+
+Solution:
+---------
+
+As long as you specify a working config file you, should work.
+
+kubectl --kubeconfig <user-home>/.kube/config  get pods 
+
+# Still problems comes,  rename the config file and try to access kubectl:
+
+
+Error
+------
+Unable to connect to the server: EOF
+
+Solution
+---------
+check cluster is started? 
+kubernetes -> start local cluster
+
+
+
+======================================================================================================
+Docker for Desktop :
+installation files :
+--------------------
+<user-home>\.docker , <user-home>\.kube ,  C:\ProgramData\DockerDesktop , C:\Program Files\Docker\Docker
+<user-home>\AppData\Local\Docker
+
+Default docker port: 6443
+Kubernetes api server port : 8080
+======================================================================================================

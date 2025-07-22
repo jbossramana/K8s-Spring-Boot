@@ -1,0 +1,180 @@
+Pod
+---
+
+A pod holds one or more container(s). Pods are the simplest unit that exists within Kubernetes (this is why 
+containers technically aren’t a part of Kubernetes – as even a single container is called a pod).
+
+Any containers in the pod share resources and a network and can communicate with each other – even if they are on 
+separate nodes.
+
+Node
+----
+
+Nodes are the hardware components. A node is likely to be a virtual machine hosted by a cloud provider or a physical 
+machine in a data centre. But, it can simpler to think of nodes as the CPU/RAM resources to be used by your Kubernetes 
+cluster, rather than just as unique machines. This is because pods aren’t constrained to any given machine at any given 
+time, they will move across all available resources to achieve the desired state of the application.
+
+There are two types of node – worker and master.
+
+Cluster
+--------
+
+Clusters actually run the containerised applications being managed by Kubernetes. A cluster is a series of nodes connected 
+together.
+
+By joining together, the nodes pool their resources making the cluster much more powerful than the individual machines 
+it is made up of. Kubernetes moves pods around the cluster as nodes are added/removed.
+
+A cluster contains multiple worker nodes and at least one master node.
+
+
+Services
+---------
+
+A service is an API object that exposes an application, it essentially describes how network traffic should access a set 
+of pods. Services are found on every node.
+
+
+Deployment
+-----------
+
+Deployments are an API object, they essentially manage pod replication.
+
+A deployment defines the state of your cluster – for example, how many replicas of a pod should be running. When the 
+deployment is added to a cluster, Kubernetes will automatically make the correct number of pods and then monitor them. 
+
+If a pod fails, Kubernetes will replicate it, following the ‘deployment’ criteria.
+
+Kubeadm
+-------
+
+Kubeadm is a quickstart installation tool for Kubernetes.
+
+It helps you to create a minimum viable cluster with a single master node. Kubeadm is quick and simple to use. Plus, 
+it makes sure your cluster conforms to best practices so it is a great tool to use when trying out Kubernetes for the 
+first time or for testing your applications.
+
+Docker Desktop 
+--------------
+
+Docker Desktop includes a standalone Kubernetes server and client, as well as Docker CLI integration. The Kubernetes 
+server runs locally within your Docker instance, is not configurable, and is a single-node cluster.
+
+The Kubernetes server runs within a Docker container on your local system, and is only for local testing. When Kubernetes 
+support is enabled, you can deploy your workloads, in parallel, on Kubernetes, Swarm, and as standalone containers. 
+Enabling or disabling the Kubernetes server does not affect your other workloads.
+
+
+
+Architecture & Main Components
+-------------------------------
+
+The core Kubernetes architecture consists of the worker nodes, the master nodes and the Kubernetes API. This section will 
+define these core parts, as well as some of the main components within them.
+
+
+Worker Node
+-----------
+
+Worker nodes are where pods are deployed.
+
+Kubernetes has a master-slave architecture, so a worker node is a slave.
+
+
+Kubelet
+-------
+
+Kubelet is an agent that runs on every worker node in a cluster. This is an important component because it receives the 
+instructions from the master node.
+
+The kubelet essentially runs the pods. It ensures that all containers are running in a pod and that these pods are healthy
+and running at the correct points in time. So it will launch and kill pods as it receives instructions from the master node 
+regarding which pods need to be added or removed.
+
+
+kube-proxy
+----------
+
+kube-proxy is the Kubernetes network proxy. It is a service that runs on every node and handles request forwarding.
+
+The main job of kube-proxy is setting up iptables rules. This deals with the fact that different pods will have different 
+IP addresses and allows you to connect to any pod within Kubernetes, this is important for enabling load balancing.
+
+If you’re looking for a bit more technical detail, it proxies UDP, TCP and SCTP but does not understand HTTP.
+
+
+Master Node
+-----------
+
+Master nodes control the deployment of pods, and therefore the worker nodes.
+
+As the name suggests, in the master-slave Kubernetes architecture, these nodes are the master.
+
+Etcd
+-----
+
+etcd stores configuration information for large, distributed systems.
+
+So Kubernetes uses etcd as a key-value store for configuration management and service discovery. Etcd must be highly available 
+and consistent to ensure services are scheduled and operated correctly. As etcd’s data is so crucial, it is highly recommended 
+that you have a backup for your cluster.
+
+Scheduler (kube-scheduler)
+---------------------------
+
+The scheduler is a component on the master node and it does what it says on the tin – makes scheduling decisions for newly 
+created pods.
+
+When a pod is created it must be assigned a node to run on. The scheduler receives information from the API about the pods’ 
+requirements and specifications and the IT resources on available nodes. It will then assign each pod to an appropriate node. 
+If the scheduler cannot find a suitable node, the pod remains unscheduled and the scheduler retries the process until a node 
+becomes available.
+
+Controller
+-----------
+
+A controller is a component on the master node, it works to move the application from its current state towards the desired state.
+
+Kubernetes has a variety of controllers. For example, the ReplicationController makes sure that the correct number of pod replicas
+are running at any given time. The controller will ‘watch’ the API for information about the cluster state and make changes accordingly.
+
+So, if the API specified that there should be 7 replicas of podA, but there was currently 8, the ReplicationController would terminate the extra pod.
+
+kube-controller-manager
+-----------------------
+
+This is a component on the master node that manages all of the controllers.
+
+Each controller e.g. ReplicationController, NamespaceController etc. is actually a separate, individual process. However, to simplify cluster management, they are all compiled into a single process. The kube-controller-manager is responsible for this compilation.
+
+It’s also a way to add cloud-vendor specific functionality to clusters. This helps to keep Kubernetes vendor-agnostic.
+
+kube-apiserver
+---------------
+
+kube-apiserver is a component on the master node which reveals the Kubernetes API to the master.
+
+It essentially acts as the frontend to the information on the cluster’s shared state, providing a bridge between the API and other Kubernetes objects e.g. pods, controllers, services etc. So all interaction between components goes through the kube-apiserver.
+
+
+Kubernetes API
+---------------
+
+The API enables Kubernetes to function. It stores information about the state of the cluster.
+
+Information about the desired state of the cluster is inputted to the API via a user or command line interface. The Kubernetes API then passes this information onto the master node. The master node will then instruct the worker nodes to carry out actions that drive the application from its current state towards the desired state.
+
+Kubectl
+--------
+
+Kubectl is the official Kubernetes command line interface tool. It is used to communicate with the API.
+
+You can input command to kubectl to create, inspect, change, replicate and destroy Kubernetes objects e.g. pods and nodes.
+
+Aggregation Layer
+------------------
+
+The aggregation layer allows you to extend Kubernetes by installing additional APIs.
+
+This can provide greater functionality than using just the core Kubernetes API. For example, you can add API extensions which allow you to define new controllers.
