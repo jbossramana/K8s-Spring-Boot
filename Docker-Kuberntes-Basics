@@ -216,7 +216,77 @@ Can load balance traffic across multiple Pods.
 
 
 
+Virtual Machine-Based Deployment of Spring Boot Applications Using Docker
 
++---------------------------------------------------------+
+|                    Physical Machine                     |
+|                                                         |
+|  +---------------------+    +-----------------------+  |
+|  |   Virtual Machine 1  |    |   Virtual Machine 2    |  |
+|  |  (Full OS + Kernel)  |    |   (Full OS + Kernel)   |  |
+|  |                      |    |                       |  |
+|  |  +--------------+    |    |  +--------------+     |  |
+|  |  | Docker Engine|    |    |  | Docker Engine|     |  |
+|  |  | (Docker Kernel)|   |    |  | (Docker Kernel)|    |  |
+|  |  +--------------+    |    |  +--------------+     |  |
+|  |                      |    |                       |  |
+|  |  +----------+        |    |  +----------+          |  |
+|  |  |Container1|        |    |  |Container3|          |  |
+|  |  |(Spring   |        |    |  |(Spring   |          |  |
+|  |  |Boot App) |        |    |  |Boot App) |          |  |
+|  |  +----------+        |    |  +----------+          |  |
+|  |  +----------+        |    |  +----------+          |  |
+|  |  |Container2|        |    |  |Container4|          |  |
+|  |  |(Spring   |        |    |  |(Spring   |          |  |
+|  |  |Boot App) |        |    |  |Boot App) |          |  |
+|  |  +----------+        |    |  +----------+          |  |
+|  +---------------------+    +-----------------------+  |
++---------------------------------------------------------+
+
+
+Kubernetes Architecture: Master and Worker Nodes with Docker Containers:
+
++--------------------------------------------------------------+
+|                       Physical Machine                       |
+|                                                              |
+|  +-------------------------+    +-------------------------+  |
+|  |  Kubernetes Master Node |    |   Kubernetes Worker Node |  |
+|  |  (Control Plane)        |    |   (Virtual Machine 1)    |  |
+|  |  - API Server           |    |  +-------------------+  |  |
+|  |  - Scheduler            |    |  |   Docker Engine   |  |  |
+|  |  - Controller Manager   |    |  |  (Docker Kernel)  |  |  |
+|  |  - etcd (state store)   |    |  +-------------------+  |  |
+|  |                         |    |                         |  |
+|  |                         |    |  +----------+           |  |
+|  |                         |    |  |Container1|           |  |
+|  |                         |    |  |(Spring   |           |  |
+|  |                         |    |  |Boot App) |           |  |
+|  |                         |    |  +----------+           |  |
+|  |                         |    |  +----------+           |  |
+|  |                         |    |  |Container2|           |  |
+|  |                         |    |  |(Spring   |           |  |
+|  |                         |    |  |Boot App) |           |  |
+|  |                         |    |  +----------+           |  |
+|  |                         |    |                         |  |
+|  |                         |    |  +-------------------+  |  |
+|  |                         |    |  |      Kubelet       |  |  |
+|  |                         |    |  | (Agent managing    |  |  |
+|  |                         |    |  |  containers on VM) |  |  |
+|  |                         |    |  +-------------------+  |  |
+|  +-------------------------+    +-------------------------+  |
+|                                                              |
+|                         Kubernetes Worker Node 2 (VM2)       |
+|                         +-------------------------+          |
+|                         |   Docker Engine         |          |
+|                         |  (Docker Kernel)        |          |
+|                         +-------------------------+          |
+|                         |  Container3 (Spring Boot)|         |
+|                         |  Container4 (Spring Boot)|         |
+|                         +-------------------------+          |
+|                         |       Kubelet            |         |
+|                         | (Agent managing containers)|       |
+|                         +-------------------------+          |
++--------------------------------------------------------------+
 
 
 
