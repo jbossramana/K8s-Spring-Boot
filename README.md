@@ -144,6 +144,29 @@ $(kubectl -n kube-system get secret | grep admin-user | awk '{print $1}')
 Copy the data -> token
 In the browser => select token option -> paste the above token
 
+🌐 ClusterIP (default)
+Internal communication only
+Accessible inside the cluster
+Example: backend APIs
+
+🌐 NodePort
+Exposes service on a port of each node
+
+Accessible via:
+<NodeIP>:<NodePort>
+Not ideal for production (basic external access)
+
+🌐 LoadBalancer
+Creates an external load balancer (cloud provider required)
+Automatically assigns a public IP
+Best for production apps
+
+Ingress (HTTP routing):
+Provides:
+Domain-based routing
+SSL termination
+Path-based routing
+
 
 
 
